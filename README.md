@@ -24,7 +24,9 @@ OUTPUT:
 Although this package tries to be as consistent as possible with previous versions of the ms package, there are a few changes here and there.
 
 ms.Experiment: your experiment name, taken from the subject name that you enter in the DAQ software
+
 ms.CorrProj: Correlation projection from the CNMFE. Displays which pixels are correlated together and suggests the location of your cells
+
 ms.PeakToNoiseRatio:
 
 
