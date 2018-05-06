@@ -1,5 +1,6 @@
 # MiniscopeAnalysis
 Analysis package for miniscope data
+Written by Guillaume Etter (Sylvain Williams Lab, McGill University)
 This is an updated version of the Miniscope analysis package developed by Daniel Aharoni at UCLA in collaboration with the Golshani lab, Silva lab, and Khaki lab.
 It combines core functions of the original ms analysis package with NormCorre alignment and CNMFE source extraction.
 
