@@ -1,4 +1,4 @@
-function ms = msNormCorre(ms);
+function ms = msNormCorre(ms,isnonrigid);
 % Performs fast, rigid registration (option for non-rigid also available).
 % Relies on NormCorre (Paninski lab). Rigid registration works fine for
 % large lens (1-2mm) GRIN lenses, while non-rigid might work better for
@@ -7,11 +7,23 @@ function ms = msNormCorre(ms);
 % documentation to perform non-rigid registration (option will be
 % implemented in a future release.
 %
-% Author: Guillaume Etter
+% Copyright (C) 2017-2018 by Guillaume Etter
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or any
+% later version.
 % Contact: etterguillaume@gmail.com
 
-
 warning off all
+
+%% Auto-detect operating system
+if ispc
+    separator = '\'; % For pc operating systems
+else
+    separator = '/'; % For unix (mac, linux) operating systems
+end
+
 %% Filtering parameters
 gSig = 7/ms.ds;
 gSiz = 17/ms.ds;
@@ -23,14 +35,14 @@ bound = round(ms.height/(2*ms.ds));
 
 template = [];
 
-writerObj = VideoWriter([ms.dirName '/' ms.analysis_time '/' 'msvideo.avi'],'Grayscale AVI');
+writerObj = VideoWriter([ms.dirName separator ms.analysis_time separator 'msvideo.avi'],'Grayscale AVI');
 open(writerObj);
 
 ms.shifts = [];
 ms.meanFrame = [];
 
 for video_i = 1:ms.numFiles;
-    name = [ms.vidObj{1, video_i}.Path '/' ms.vidObj{1, video_i}.Name];
+    name = [ms.vidObj{1, video_i}.Path separator ms.vidObj{1, video_i}.Name];
     disp(['Registration on: ' name]);
     
     % read data and convert to single
@@ -41,11 +53,18 @@ for video_i = 1:ms.numFiles;
     Y = imfilter(Yf,psf,'symmetric');
     [d1,d2,T] = size(Y);
       
-    %Rigid registration
+    % Setting registration parameters (rigid vs non-rigid)
+    if isnonrigid
+        disp('Non-rigid motion correction...');
+    options = NoRMCorreSetParms('d1',d1,'d2',d2,'bin_width',50, ...
+    'grid_size',[128,128]*2,'mot_uf',4,'correct_bidir',false, ...
+    'overlap_pre',32,'overlap_post',32,'max_shift',20);
+    else
+        disp('Rigid motion correction...');
     options = NoRMCorreSetParms('d1',d1-bound,'d2',d2-bound,'bin_width',200,'max_shift',20,'iter',1,'correct_bidir',false);
-        
-    %% register using the high pass filtered data and apply shifts to original data
+    end
     
+    %% register using the high pass filtered data and apply shifts to original data
     if isempty(template);
         [M1,shifts1,template] = normcorre(Y(bound/2+1:end-bound/2,bound/2+1:end-bound/2,:),options); % register filtered data
         % exclude boundaries due to high pass filtering effects

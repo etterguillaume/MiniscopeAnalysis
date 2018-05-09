@@ -4,15 +4,26 @@
 % first run a few manual analyses to establish your parameters, then use
 % the CNMFE_large (patches analysis) with established parameters.
 
-% Author: Guillaume Etter
+% Copyright (C) 2017-2018 by Guillaume Etter
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or any
+% later version.
 % Contact: etterguillaume@gmail.com
 
-%% clear the workspace and select data
 function ms = msRunCNMFE_large(ms)
+
+%% Auto-detect operating system
+if ispc
+    separator = '\'; % For pc operating systems
+else
+    separator = '/'; % For unix (mac, linux) operating systems
+end
 
 %% choose data
 neuron = Sources2D();
-nam = get_fullname([ms.dirName '/' ms.analysis_time '/' 'msvideo.avi']);
+nam = get_fullname([ms.dirName separator ms.analysis_time separator 'msvideo.avi']);
 nam = neuron.select_data(nam);  %if nam is [], then select data interactively
 
 %% parameters
