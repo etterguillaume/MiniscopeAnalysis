@@ -3,17 +3,9 @@ function ms = msNormCorre(ms,isnonrigid);
 % Relies on NormCorre (Paninski lab). Rigid registration works fine for
 % large lens (1-2mm) GRIN lenses, while non-rigid might work better for
 % smaller lenses. Ideally you want to compare both on a small sample before
-% choosing one method or the other. Please refer to the original NormCorre
-% documentation to perform non-rigid registration (option will be
-% implemented in a future release.
-%
-% Copyright (C) 2017-2018 by Guillaume Etter
-%
-% This program is free software; you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation; either version 3 of the License, or any
-% later version.
-% Contact: etterguillaume@gmail.com
+% choosing one method or the other.
+% Original script by Eftychios Pnevmatikakis, edited by Guillaume Etter
+
 
 warning off all
 

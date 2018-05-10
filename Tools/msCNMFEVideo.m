@@ -20,7 +20,7 @@ function msCNMFEVideo(ms, cell_ID, frameLimit, downSamp,is_write,is_plot)
 if is_write;
     [file,path] = uiputfile('.avi');
     
-writerObj = VideoWriter([path '/' file]);
+writerObj = VideoWriter([path '/' file],'Uncompressed AVI');
 writerObj.FrameRate = 30;
     open(writerObj);
 end
@@ -28,15 +28,23 @@ end
     if isempty(frameLimit)
         frameLimit = [1 ms.numFrames];
     end
+    
+    %% Pre-process the spatial footprints
+for cell_i = 1:size(ms.SFPs,3);
+    SFP_temp = ms.SFPs(:,:,cell_i);
+    SFP_temp(SFP_temp<0.5*max(max(SFP_temp))) = 0; % This is to sharpen footprints, based on Ziv lab method
+    %SFP_temp=imresize(SFP_temp,ms.ds); % Upsample footprints
+    SFPs(:,:,cell_i) = SFP_temp;
+end
 
-background = max(ms.SFPs,[],3);
+background = max(SFPs,[],3);
 
-% if cell_ID > 0;
-%        perimeter=uint8(bwperim(ms.SFPs(:,:,cell_ID)));
-%        perimeter(perimeter>0)= 255;
-%        perimeter(:,:,2)=perimeter(:,:,1);
-%        perimeter(:,:,3) = 0;
-% end
+if cell_ID > 0;
+        perimeter = bwperim(SFPs(:,:,cell_ID)>0);
+        perimeter = uint8(255*perimeter);
+        perimeter(:,:,2) = perimeter(:,:,1);
+        perimeter(:,:,3) = perimeter(:,:,1);
+end
 
 if is_plot;
 figure;
@@ -49,19 +57,19 @@ max_traces = max(traces,[],1);
 traces=traces./max_traces*255;
 
 for frame_i=frameLimit(1):downSamp:frameLimit(2);
-    frame = zeros(size(ms.CorrProj));
+    frame = zeros(size(background));
     for seg=1:ms.numNeurons;
-    SFP=ms.SFPs(:,:,seg);
+    SFP=SFPs(:,:,seg);
     SFP=SFP./max(max(SFP))*traces(frame_i,seg);
     frame = frame + SFP;
     end
         
     frame = imfuse(frame,background,'falsecolor');
-    frame = insertText(frame,[size(ms.CorrProj,1)/2 size(ms.CorrProj,2)-20],['Time: ' num2str(ms.time(frame_i)./1000) 's'],'TextColor','white','BoxOpacity',0);
+    frame = insertText(frame,[size(background,1)/2 size(background,2)-20],['Time: ' num2str(ms.time(frame_i)./1000) 's'],'TextColor','white','BoxOpacity',0);
     
-%     if cell_ID>0;
-%        frame = imadd(frame,perimeter);
-%     end
+     if cell_ID>0;
+        frame = imadd(frame,perimeter);
+     end
     
     if is_write;
     writeVideo(writerObj,uint8(frame));

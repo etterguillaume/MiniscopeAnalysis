@@ -1,7 +1,13 @@
 function msPlotAnalysisSummary(ms,behav)
 %MSPLOTANALYSISSUMMARY Plot summar of your results
 %   This is a quick function to get an overview of your results
-% Author: Guillaume Etter
+
+% Copyright (C) 2017-2018 by Guillaume Etter
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or any
+% later version.
 % Contact: etterguillaume@gmail.com
 
 summary_fig = figure('Name',ms.Experiment);
@@ -12,6 +18,8 @@ summary_fig = figure('Name',ms.Experiment);
     title('Mean frame');
     ax1=gca;
     colormap(ax1, gray);
+    end
+    
     total_shifts = [];
     for video_i = 1:ms.numFiles
         total_shifts = vertcat(total_shifts,squeeze(cat(3,ms.shifts{video_i}(:).shifts)));

@@ -3,14 +3,7 @@
 % version allows you to perform unsupervised analysis. It is recommended to
 % first run a few manual analyses to establish your parameters, then use
 % the CNMFE_large (patches analysis) with established parameters.
-
-% Copyright (C) 2017-2018 by Guillaume Etter
-%
-% This program is free software; you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation; either version 3 of the License, or any
-% later version.
-% Contact: etterguillaume@gmail.com
+% Based on original script by Pengcheng Zhou, edited by Guillaume Etter
 
 function ms = msRunCNMFE_large(ms)
 
@@ -31,7 +24,6 @@ nam = neuron.select_data(nam);  %if nam is [], then select data interactively
 pars_envs = struct('memory_size_to_use', 12, ...   % GB, memory space you allow to use in MATLAB
     'memory_size_per_patch', 0.6, ...   % GB, space for loading data within one patch
     'patch_dims', [64, 64]);  %GB, patch size
-
 % -------------------------      SPATIAL      -------------------------  %
 include_residual = false; % If true, look for neurons in the residuals
 gSig = 3;           % pixel, gaussian width of a gaussian kernel for filtering the data. 0 means no filtering
@@ -261,15 +253,3 @@ ms.SFPs = neuron.reshape(neuron.A, 2);
 ms.numNeurons = size(ms.SFPs,3);
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
