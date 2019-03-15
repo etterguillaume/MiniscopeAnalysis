@@ -1,3 +1,8 @@
+NOTE: MiniscopeAnalysis is not being developed anymore. Please keep submiting requests concerning issues or pull requests.
+I am currently working on a new analysis pipline called PIMPN:
+https://github.com/etterguillaume/PIMPN
+PIMPN performs similar analyses using Google Colaboratory (virtual Python environment, and inputs/outputs compatible with MiniscopeAnalysis.
+
 # MiniscopeAnalysis
 Analysis package for miniscope data
 Written by Guillaume Etter (Sylvain Williams Lab, McGill University)
