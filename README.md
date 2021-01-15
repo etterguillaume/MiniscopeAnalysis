@@ -1,5 +1,6 @@
-NOTE: MiniscopeAnalysis is not being developed anymore. Please keep submiting requests concerning issues or pull requests.
-I am currently working on a new analysis pipline called PIMPN:
+NOTE: MiniscopeAnalysis is not being developed anymore. This version is only compatible with the v3 miniscope DAQ software.
+Please keep submiting requests concerning issues or pull requests.
+I am currently working on a new analysis pipeline called PIMPN:
 https://github.com/etterguillaume/PIMPN
 PIMPN performs similar analyses using Google Colaboratory (virtual Python environment, and inputs/outputs compatible with MiniscopeAnalysis.
 
